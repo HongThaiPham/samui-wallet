@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu'
+import { toastSuccess } from '@workspace/ui/lib/toast-success'
 import { LucideWallet2 } from 'lucide-react'
 import { Link } from 'react-router'
 
@@ -35,13 +36,16 @@ export function SettingsUiWalletDropdown({
       <DropdownMenuContent align="start" className="w-56">
         {items.map((item) => (
           <DropdownMenuItem
-            disabled={item.id === active?.id}
             key={item.id}
             onClick={async () => {
+              if (item.id === active?.id) {
+                return
+              }
               await setActive(item.id)
+              toastSuccess(`Switched to wallet: ${item.name}`)
             }}
           >
-            <WalletUiItem wallet={item} />
+            <WalletUiItem wallet={item} withCopy />
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
